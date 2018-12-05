@@ -39,15 +39,11 @@ jobs:
   build:
     docker:
       # specify the version you desire here
+      container_name: node-server
       - image: circleci/node:8.9.0
-      # container_name: nodeServer
-      working_dir: /node/server
-      depends_on:
-       - mysql
-
+      - image: circleci/mysql:5.7
     container_name: mysql
     restart: on-failure:2
-      - image: circleci/mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
       MYSQL_USER: 'root'
@@ -63,7 +59,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    # working_directory: ~/repo
+    working_directory: ~/repo
 
     steps:
       - checkout
