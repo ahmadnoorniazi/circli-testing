@@ -34,15 +34,87 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      container_name: nodeServer
+      - image: circleci/node:8.9.0
+      working_dir: /node/server
+      depends_on:
+       - mysql
+       
+    container_name: mysql
+    restart: on-failure:2
+      - image: circleci/mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
+    volumes:
+      - ./mounts/mysql:/var/lib/mysql
+      - ./mounts/scripts:/scripts
+    ports:
+      - "3307:3306"
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    # working_directory: ~/repo
+
+    steps:
+      - checkout
+      #  ports:
+      #     - 3307:3306
+      #   environment:
+      #     MYSQL_ROOT_PASSWORD: root
+      #     MYSQL_DATABASE: unit23_sam
+      #     MYSQL_USER: root
+      #     MYSQL_PASSWORD: root
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: yarn test
+
+
 # version: 2
 # jobs:
 #   build:
 #     docker:
-#       # specify the version you desire here
-#       - image: circleci/node:8.9.0
-#       - image: circleci/mysql:5.7
+#     #   # specify the version you desire here
+#     #   - image: circleci/node:8.9.0
+#     #   - image: circleci/mysql:5.7
+#     # container_name: mysql
+#     # restart: on-failure:2
+#     # environment:
+#     #   MYSQL_ROOT_PASSWORD: 'root'
+#     #   MYSQL_USER: 'root'
+#     #   MYSQL_PASS: 'root'
+#     # volumes:
+#     #   - ./mounts/mysql:/var/lib/mysql
+#     #   - ./mounts/scripts:/scripts
+#     # ports:
+#     #   - "3307:3306"
+#       mysql:
 #     container_name: mysql
 #     restart: on-failure:2
+#     image: circleci/mysql:5.7
 #     environment:
 #       MYSQL_ROOT_PASSWORD: 'root'
 #       MYSQL_USER: 'root'
@@ -52,6 +124,21 @@
 #       - ./mounts/scripts:/scripts
 #     ports:
 #       - "3307:3306"
+
+#   #node express server
+#   nodeServer:
+#     container_name: node-server
+#     working_dir: /node/server
+#     restart: on-failure:2
+#     depends_on:
+#       - mysql
+#     image: circleci/node:8.9.0
+#     command: /node/createUser.sh
+#     volumes:
+#       # - ../server:/node/server
+#       - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
+#     links:
+#       - mysql
       
 #       # Specify service dependencies here if necessary
 #       # CircleCI maintains a library of pre-built images
@@ -86,87 +173,5 @@
         
 #       # run tests!
 #       - run: yarn test
-
-
-version: 2
-jobs:
-  build:
-    docker:
-    #   # specify the version you desire here
-    #   - image: circleci/node:8.9.0
-    #   - image: circleci/mysql:5.7
-    # container_name: mysql
-    # restart: on-failure:2
-    # environment:
-    #   MYSQL_ROOT_PASSWORD: 'root'
-    #   MYSQL_USER: 'root'
-    #   MYSQL_PASS: 'root'
-    # volumes:
-    #   - ./mounts/mysql:/var/lib/mysql
-    #   - ./mounts/scripts:/scripts
-    # ports:
-    #   - "3307:3306"
-      mysql:
-    container_name: mysql
-    restart: on-failure:2
-    image: circleci/mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_USER: 'root'
-      MYSQL_PASS: 'root'
-    volumes:
-      - ./mounts/mysql:/var/lib/mysql
-      - ./mounts/scripts:/scripts
-    ports:
-      - "3307:3306"
-
-  #node express server
-  nodeServer:
-    container_name: node-server
-    working_dir: /node/server
-    restart: on-failure:2
-    depends_on:
-      - mysql
-    image: circleci/node:8.9.0
-    command: /node/createUser.sh
-    volumes:
-      # - ../server:/node/server
-      - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
-    links:
-      - mysql
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      #  ports:
-      #     - 3307:3306
-      #   environment:
-      #     MYSQL_ROOT_PASSWORD: root
-      #     MYSQL_DATABASE: unit23_sam
-      #     MYSQL_USER: root
-      #     MYSQL_PASSWORD: root
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn test
 
 
