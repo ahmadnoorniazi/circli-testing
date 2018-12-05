@@ -4,11 +4,7 @@ jobs:
     docker:
       
       # specify the version you desire here
-      - image: circleci/node:8.9.0
-      volumes:
-      ../server:/node/server
-       ./mounts/scripts/createUser.sh:/node/createUser.sh:ro      
-        
+      - image: circleci/node:8.9.0       
       - image: circleci/mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
@@ -31,6 +27,9 @@ jobs:
 
     steps:
       - checkout
+      volumes:
+      - ../server:/node/server
+      - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
       # Download and cache dependencies
       - restore_cache:
           keys:
