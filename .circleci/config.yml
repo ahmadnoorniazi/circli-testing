@@ -39,7 +39,6 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      container_name: node-server
       - image: circleci/node:8.9.0
       - image: circleci/mysql:5.7
     container_name: mysql
