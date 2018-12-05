@@ -2,11 +2,15 @@ version: 2
 jobs:
   build:
     docker:
-      nodeServer:
+      
       # specify the version you desire here
       - image: circleci/node:8.9.0
-    # steps:
-
+      volumes:
+      - ../server:/node/server
+      - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro      
+      depends_on:
+        - mysql
+        
       - image: circleci/mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
