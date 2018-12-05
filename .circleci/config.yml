@@ -27,8 +27,6 @@ jobs:
 
     steps:
       - checkout
-      - ../server:/node/server
-      - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -41,6 +39,8 @@ jobs:
       - save_cache:
           paths:
             - node_modules
+            #  - ../server:/node/server
+             - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
