@@ -1,63 +1,105 @@
+# version: 2
+# jobs:
+#   build:
+#     docker:
+      
+#       # specify the version you desire here
+#       - image: circleci/node:8.9.0       
+#       - image: circleci/mysql:5.7
+#     environment:
+#       MYSQL_ROOT_PASSWORD: 'root'
+#       MYSQL_USER: 'root'
+#       MYSQL_PASS: 'root'
+#     volumes:
+#       - ./mounts/mysql:/var/lib/mysql
+#       - ./mounts/scripts:/scripts
+#     ports:
+#       - "3307:3306"
+#     depends_on:
+#       - circleci/node
+      
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       # - image: circleci/mongo:3.4.4
+
+#     working_directory: ~/repo
+
+#     steps:
+#       - checkout
+#       # Download and cache dependencies
+#       - restore_cache:
+#           keys:
+#           - v1-dependencies-{{ checksum "package.json" }}
+#           # fallback to using the latest cache if no exact match is found
+#           - v1-dependencies-
+      
+#       - run:
+#           name: install mysql client
+#           command: sudo apt-get install mysql-client
+#       - run:
+#           name: install dockerize
+#           command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+#           environment:
+#             DOCKERIZE_VERSION: v0.6.0
+#       - run:
+#           name: wait for mysql
+#           command: dockerize -wait tcp://localhost:3306 -timeout 1m
+#       - run:
+#           name: create database
+#           command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
+#       - run: yarn install
+      
+
+#       - save_cache:
+#           paths:
+#             - node_modules
+#             - ../server:/node/server
+#              - mounts/scripts/createUser.sh:/node/createUser.sh:ro
+#           key: v1-dependencies-{{ checksum "package.json" }}
+        
+#       # run tests!
+#       - run: yarn test
+      
+
+###################
+
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
 version: 2
 jobs:
   build:
-    docker:
-      
+    docker:  
       # specify the version you desire here
-      - image: circleci/node:8.9.0       
-      - image: circleci/mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_USER: 'root'
-      MYSQL_PASS: 'root'
-    volumes:
-      - ./mounts/mysql:/var/lib/mysql
-      - ./mounts/scripts:/scripts
-    ports:
-      - "3307:3306"
-    depends_on:
-      - circleci/node
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+      - image: circleci/node:8.9.0
 
-    working_directory: ~/repo
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
 
     steps:
+      # Checkout from GIT
       - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      
-      - run:
-          name: install mysql client
-          command: sudo apt-get install mysql-client
-      - run:
-          name: install dockerize
-          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-          environment:
-            DOCKERIZE_VERSION: v0.6.0
-      - run:
-          name: wait for mysql
-          command: dockerize -wait tcp://localhost:3306 -timeout 1m
-      - run:
-          name: create database
-          command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
-      - run: yarn install
-      
 
-      - save_cache:
-          paths:
-            - node_modules
-            - ../server:/node/server
-             - mounts/scripts/createUser.sh:/node/createUser.sh:ro
-          key: v1-dependencies-{{ checksum "package.json" }}
-        
-      # run tests!
-      - run: yarn test
-      
+      - run:
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 30`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      # Import DB Dump
+      - run:
+          name: Install MySQL CLI
+          command: |
+            sudo apt-get install mysql-client
+            mysql -h 127.0.0.1 -u user -ppassw0rd test < sql-data/dummy.sql
+            mysql -h 127.0.0.1 -u user -ppassw0rd --execute="SELECT * FROM test.user"
