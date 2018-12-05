@@ -1,65 +1,65 @@
-# version: 2
-# jobs:
-#   build:
-#     docker:
+version: 2
+jobs:
+  build:
+    docker:
       
-#       # specify the version you desire here
-#       - image: circleci/node:8.9.0       
-#       - image: circleci/mysql:5.7
-#     environment:
-#       MYSQL_ROOT_PASSWORD: 'root'
-#       MYSQL_USER: 'root'
-#       MYSQL_PASS: 'root'
-#     volumes:
-#       - ./mounts/mysql:/var/lib/mysql
-#       - ./mounts/scripts:/scripts
-#     ports:
-#       - "3307:3306"
-#     depends_on:
-#       - circleci/node
+      # specify the version you desire here
+      - image: circleci/node:8.9.0       
+      - image: circleci/mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
+    volumes:
+      - ./mounts/mysql:/var/lib/mysql
+      - ./mounts/scripts:/scripts
+    ports:
+      - "3307:3306"
+    depends_on:
+      - circleci/node
       
-#       # Specify service dependencies here if necessary
-#       # CircleCI maintains a library of pre-built images
-#       # documented at https://circleci.com/docs/2.0/circleci-images/
-#       # - image: circleci/mongo:3.4.4
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
 
-#     working_directory: ~/repo
+    working_directory: ~/repo
 
-#     steps:
-#       - checkout
-#       # Download and cache dependencies
-#       - restore_cache:
-#           keys:
-#           - v1-dependencies-{{ checksum "package.json" }}
-#           # fallback to using the latest cache if no exact match is found
-#           - v1-dependencies-
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
       
-#       - run:
-#           name: install mysql client
-#           command: sudo apt-get install mysql-client
-#       - run:
-#           name: install dockerize
-#           command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-#           environment:
-#             DOCKERIZE_VERSION: v0.6.0
-#       - run:
-#           name: wait for mysql
-#           command: dockerize -wait tcp://localhost:3306 -timeout 1m
-#       - run:
-#           name: create database
-#           command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
-#       - run: yarn install
+      # - run:
+      #     name: install mysql client
+      #     command: sudo apt-get install mysql-client
+      # - run:
+      #     name: install dockerize
+      #     command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+      #     environment:
+      #       DOCKERIZE_VERSION: v0.6.0
+      # - run:
+      #     name: wait for mysql
+      #     command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      # - run:
+      #     name: create database
+      #     command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
+      - run: yarn install
       
 
-#       - save_cache:
-#           paths:
-#             - node_modules
-#             - ../server:/node/server
-#              - mounts/scripts/createUser.sh:/node/createUser.sh:ro
-#           key: v1-dependencies-{{ checksum "package.json" }}
+      - save_cache:
+          paths:
+            - node_modules
+            - ../server:/node/server
+             - mounts/scripts/createUser.sh:/node/createUser.sh:ro
+          key: v1-dependencies-{{ checksum "package.json" }}
         
-#       # run tests!
-#       - run: yarn test
+      # run tests!
+      - run: yarn test
       
 
 ###################
@@ -109,38 +109,38 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:8.9.0
+# version: 2
+# jobs:
+#   build:
+#     docker:
+#       # specify the version you desire here
+#       - image: circleci/node:8.9.0
       
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - checkout
+#     steps:
+#       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+#       # Download and cache dependencies
+#       - restore_cache:
+#           keys:
+#           - v1-dependencies-{{ checksum "package.json" }}
+#           # fallback to using the latest cache if no exact match is found
+#           - v1-dependencies-
 
-      - run: yarn install
+#       - run: yarn install
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+#       - save_cache:
+#           paths:
+#             - node_modules
+#           key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      - run: yarn test
+#       # run tests!
+#       - run: yarn test
 
 
