@@ -27,7 +27,6 @@ jobs:
 
     steps:
       - checkout
-      volumes:
       - ../server:/node/server
       - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
       # Download and cache dependencies
