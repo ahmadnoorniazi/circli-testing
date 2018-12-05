@@ -31,7 +31,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: docker-compose docker-compose.yml up -d
+      - run: docker-compose -f ../docker-compose.yml up 
       - run: docker exec -it -u node node-server bash -c yarn && yarn test
 
 
