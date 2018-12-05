@@ -41,6 +41,17 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:8.9.0
       - image: circleci/mysql:5.7
+    container_name: mysql
+    restart: on-failure:2
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
+    volumes:
+      - ./mounts/mysql:/var/lib/mysql
+      - ./mounts/scripts:/scripts
+    ports:
+      - "3307:3306"
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
