@@ -1,51 +1,51 @@
-version: 2
-jobs:
-  build:
-    docker:
+# version: 2
+# jobs:
+#   build:
+#     docker:
       
-      # specify the version you desire here
-      - image: circleci/node:8.9.0       
-      - image: circleci/mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_USER: 'root'
-      MYSQL_PASS: 'root'
-    volumes:
-      - ./mounts/mysql:/var/lib/mysql
-      - ./mounts/scripts:/scripts
-    ports:
-      - "3307:3306"
-    depends_on:
-      - circleci/node
+#       # specify the version you desire here
+#       - image: circleci/node:8.9.0       
+#       - image: circleci/mysql:5.7
+#     environment:
+#       MYSQL_ROOT_PASSWORD: 'root'
+#       MYSQL_USER: 'root'
+#       MYSQL_PASS: 'root'
+#     volumes:
+#       - ./mounts/mysql:/var/lib/mysql
+#       - ./mounts/scripts:/scripts
+#     ports:
+#       - "3307:3306"
+#     depends_on:
+#       - circleci/node
       
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+#     steps:
+#       - checkout
+#       # Download and cache dependencies
+#       - restore_cache:
+#           keys:
+#           - v1-dependencies-{{ checksum "package.json" }}
+#           # fallback to using the latest cache if no exact match is found
+#           - v1-dependencies-
 
-      - run: yarn install
+#       - run: yarn install
       
 
-      - save_cache:
-          paths:
-            - node_modules
-            - ../server:/node/server
-             - mounts/scripts/createUser.sh:/node/createUser.sh:ro
-          key: v1-dependencies-{{ checksum "package.json" }}
+#       - save_cache:
+#           paths:
+#             - node_modules
+#             - ../server:/node/server
+#              - mounts/scripts/createUser.sh:/node/createUser.sh:ro
+#           key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      - run: yarn test
+#       # run tests!
+#       - run: yarn test
       
 
 ###################
@@ -130,3 +130,30 @@ jobs:
 #       - run: yarn test
 
 
+version: 2
+jobs:
+  test:
+    working_directory: "~/express_template"
+    docker:
+      - image: "circleci/node:9.3.0"
+      - image: "mysql:8.0"
+        ports:
+          - "3306:3306"
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+    steps:
+      - checkout
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://$HOST:$PORT -timeout 1m
+          environment:
+            HOST: localhost
+            PORT: 3306
