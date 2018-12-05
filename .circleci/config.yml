@@ -39,12 +39,12 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      container_name: nodeServer
       - image: circleci/node:8.9.0
+      container_name: nodeServer
       working_dir: /node/server
       depends_on:
        - mysql
-       
+
     container_name: mysql
     restart: on-failure:2
       - image: circleci/mysql:5.7
