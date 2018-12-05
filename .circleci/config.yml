@@ -43,8 +43,6 @@ jobs:
     docker:
         - image: mysql:5.7
   #mysql server
-  mysql:
-    container_name: mysql
     restart: on-failure:2
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
@@ -57,13 +55,11 @@ jobs:
       - "3307:3306"
 
   #node express server
-  nodeServer:
-    container_name: node-server
+    - image: circleci/node:8.14.0
     working_dir: /node/server
     restart: on-failure:2
     depends_on:
       - mysql
-    - image: circleci/node:8.14.0
     command: /node/createUser.sh
     volumes:
       - ../server:/node/server
@@ -71,18 +67,18 @@ jobs:
     links:
       - mysql
   #reverse proxy
-  nginx:
-    container_name: nginx
-    restart: on-failure:2
-    depends_on:
-      - nodeServer
-    image: nginx:latest
-    volumes:
-      - ./mounts/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./mounts/nginx/cert.crt:/etc/nginx/cert.crt:ro
-      - ./mounts/nginx/cert.key:/etc/nginx/cert.key:ro
-    links:
-      - nodeServer
-    ports:
-      - "80:80"
-      - "443:443"
+  # nginx:
+  #   container_name: nginx
+  #   restart: on-failure:2
+  #   depends_on:
+  #     - nodeServer
+  #   image: nginx:latest
+  #   volumes:
+  #     - ./mounts/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./mounts/nginx/cert.crt:/etc/nginx/cert.crt:ro
+  #     - ./mounts/nginx/cert.key:/etc/nginx/cert.key:ro
+  #   links:
+  #     - nodeServer
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
