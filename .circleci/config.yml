@@ -35,7 +35,7 @@ jobs:
           - v1-dependencies-
 
       - run: yarn install
-      - run: mysqladmin -proot create test
+      - run: mysql -h 127.0.0.1 -u root -e "create database test"
 
       - save_cache:
           paths:
