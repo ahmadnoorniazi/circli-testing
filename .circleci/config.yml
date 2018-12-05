@@ -1,38 +1,86 @@
 
-version: 2
-jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:7.10
+# version: 2
+# jobs:
+#   build:
+#     docker:
+#       # specify the version you desire here
+#       - image: circleci/node:7.10
       
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - checkout
+#     steps:
+#       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+#       # Download and cache dependencies
+#       - restore_cache:
+#           keys:
+#           - v1-dependencies-{{ checksum "package.json" }}
+#           # fallback to using the latest cache if no exact match is found
+#           - v1-dependencies-
 
-      # - run: yarn install
+#       # - run: yarn install
 
-       # - run: sudo service docker start && docker-compose -f ./docker-compose.yml up 
-      # - run: docker exec -it -u node node-server bash -c yarn && yarn test- save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+#        # - run: sudo service docker start && docker-compose -f ./docker-compose.yml up 
+#       # - run: docker exec -it -u node node-server bash -c yarn && yarn test- save_cache:
+#           paths:
+#             - node_modules
+#           key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      - run: docker-compose -f docker-compose.yml up -d
-      - run: docker exec -it -u node  bash -c yarn && yarn test
+#       # run tests!
+#       - run: docker-compose -f docker-compose.yml up -d
+#       - run: docker exec -it -u node  bash -c yarn && yarn test
 
 
+
+version: '3'
+services:
+  #mysql server
+  mysql:
+    container_name: mysql
+    restart: on-failure:2
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
+    volumes:
+      - ./mounts/mysql:/var/lib/mysql
+      - ./mounts/scripts:/scripts
+    ports:
+      - "3307:3306"
+
+  #node express server
+  nodeServer:
+    container_name: node-server
+    working_dir: /node/server
+    restart: on-failure:2
+    depends_on:
+      - mysql
+    image: node:8.14.0
+    command: /node/createUser.sh
+    volumes:
+      - ../server:/node/server
+      - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
+    links:
+      - mysql
+  #reverse proxy
+  nginx:
+    container_name: nginx
+    restart: on-failure:2
+    depends_on:
+      - nodeServer
+    image: nginx:latest
+    volumes:
+      - ./mounts/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./mounts/nginx/cert.crt:/etc/nginx/cert.crt:ro
+      - ./mounts/nginx/cert.key:/etc/nginx/cert.key:ro
+    links:
+      - nodeServer
+    ports:
+      - "80:80"
+      - "443:443"
