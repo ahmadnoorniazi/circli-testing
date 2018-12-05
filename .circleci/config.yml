@@ -39,7 +39,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-            #  - ../server:/node/server
+            - ../server:/node/server
              - mounts/scripts/createUser.sh:/node/createUser.sh:ro
           key: v1-dependencies-{{ checksum "package.json" }}
         
