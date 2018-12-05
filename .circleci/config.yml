@@ -40,7 +40,7 @@ jobs:
           paths:
             - node_modules
             #  - ../server:/node/server
-             - ./mounts/scripts/createUser.sh:/node/createUser.sh:ro
+             - mounts/scripts/createUser.sh:/node/createUser.sh:ro
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
