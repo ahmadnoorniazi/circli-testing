@@ -92,6 +92,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
+    build:
     docker:
       - image: circleci/mysql:5.7
     #   restart: on-failure:2
@@ -104,6 +105,7 @@ jobs:
     #   - ./mounts/scripts:/scripts
     # ports:
     #   - "3307:3306"
+    build:
     docker:
       - image:  nginx:latest
       # Specify service dependencies here if necessary
