@@ -52,7 +52,7 @@ jobs:
     steps:
       - checkout
        ports:
-          - "3307:3306"
+          - 3307:3306
         environment:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: unit23_sam
