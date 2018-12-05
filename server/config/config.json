@@ -12,9 +12,7 @@
     "database": "test",
     "dialect": "mysql",
     "driver": "mysql",
-    "host": "127.0.0.1",
-    "port": 3307,
-    "port_mapping": "3307:3306"
+    "host": "127.0.0.1:3306"
   },
   "production": {
     "username": "root",
