@@ -41,9 +41,9 @@ jobs:
       # nodeServer:
       # specify the version you desire here
       - image: circleci/node:8.9.0
-      depends_on:
+      - depends_on:
       - mysql
-    # mysql:
+     mysql:
       - image: circleci/mysql:5.7
     container_name: mysql
     restart: on-failure:2
