@@ -11,8 +11,7 @@
     "password": "root",
     "database": "test",
     "dialect": "mysql",
-    "driver": "mysql",
-    "host": "localhost"
+    "host": "mysql"
   },
   "production": {
     "username": "root",
