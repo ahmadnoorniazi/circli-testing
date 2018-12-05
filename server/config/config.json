@@ -12,7 +12,8 @@
     "database": "test",
     "dialect": "mysql",
     "driver": "mysql",
-    "host": "127.0.0.1:3306"
+    "host": "mysql",
+    "socketPath": "/var/run/mysqld/mysqld.sock"
   },
   "production": {
     "username": "root",
