@@ -40,7 +40,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:8.9.0
-      container_name: nodeServer
+      # container_name: nodeServer
       working_dir: /node/server
       depends_on:
        - mysql
