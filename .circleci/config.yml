@@ -41,8 +41,7 @@ version: '2'
 jobs:
   build:
     docker:
-        - image: mysql:5.7
-  #mysql server
+        - image: circleci/mysql:5.7
     restart: on-failure:2
     environment:
       MYSQL_ROOT_PASSWORD: 'root'
