@@ -42,16 +42,16 @@
 #   build:
 #     docker:
 #         - image: circleci/mysql:5.7
-#     restart: on-failure:2
-#     environment:
-#       MYSQL_ROOT_PASSWORD: 'root'
-#       MYSQL_USER: 'root'
-#       MYSQL_PASS: 'root'
-#     volumes:
-#       - ./mounts/mysql:/var/lib/mysql
-#       - ./mounts/scripts:/scripts
-#     ports:
-#       - "3307:3306"
+    # restart: on-failure:2
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: 'root'
+    #   MYSQL_USER: 'root'
+    #   MYSQL_PASS: 'root'
+    # volumes:
+    #   - ./mounts/mysql:/var/lib/mysql
+    #   - ./mounts/scripts:/scripts
+    # ports:
+    #   - "3307:3306"
 
 #   #node express server
 #     - image: circleci/node:8.14.0
@@ -93,6 +93,16 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:7.10
       - image: circleci/mysql:5.7
+      restart: on-failure:2
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
+    volumes:
+      - ./mounts/mysql:/var/lib/mysql
+      - ./mounts/scripts:/scripts
+    ports:
+      - "3307:3306"
       - image:  nginx:latest
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
