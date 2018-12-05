@@ -157,3 +157,5 @@ jobs:
           environment:
             HOST: localhost
             PORT: 3306
+          - run: yarn install
+        - run: yarn test
