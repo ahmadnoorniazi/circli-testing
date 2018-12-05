@@ -51,13 +51,13 @@ jobs:
 
     steps:
       - checkout
-       ports:
-          - 3307:3306
-        environment:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: unit23_sam
-          MYSQL_USER: root
-          MYSQL_PASSWORD: root
+      #  ports:
+      #     - 3307:3306
+      #   environment:
+      #     MYSQL_ROOT_PASSWORD: root
+      #     MYSQL_DATABASE: unit23_sam
+      #     MYSQL_USER: root
+      #     MYSQL_PASSWORD: root
 
       # Download and cache dependencies
       - restore_cache:
