@@ -39,6 +39,8 @@
 
 version: '3'
 services:
+jobs:
+  build:
   #mysql server
   mysql:
     container_name: mysql
