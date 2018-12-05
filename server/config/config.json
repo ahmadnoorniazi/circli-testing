@@ -12,7 +12,7 @@
     "database": "test",
     "dialect": "mysql",
     "driver": "mysql",
-    "host": "mysql",
+    "host": "127.0.0.1",
     "socketPath": "/var/run/mysqld/mysqld.sock"
   },
   "production": {
