@@ -5,8 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
-    "format": "prettier --write \"**/*.{js,jsx}\"",
-    "lint": "eslint \"**/*.{js,jsx}\" --quiet",
     "test": "jest"
   },
   "repository": "https://github.com/UNIT-23/rest_boilerplate.git",
@@ -27,7 +25,6 @@
     "chai": "^4.2.0",
     "cors": "^2.8.5",
     "dotenv": "^6.1.0",
-    "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^8.0.0",
