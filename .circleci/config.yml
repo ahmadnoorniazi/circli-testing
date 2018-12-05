@@ -34,9 +34,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       
-      - run:
-          name: install mysql client
-          command: sudo apt-get install mysql-client
+      # - run:
+      #     name: install mysql client
+      #     command: sudo apt-get install mysql-client
     #   - run:
     #       name: install dockerize
     #       command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
