@@ -35,7 +35,7 @@ jobs:
           - v1-dependencies-
 
       - run: yarn install
-      - run: docker exec mysql bash -c 'mysqladmin -proot create test'
+      - run: mysqladmin -proot create test
 
       - save_cache:
           paths:
