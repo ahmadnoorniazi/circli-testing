@@ -1,5 +1,5 @@
 process.env.NODE_ENV = "test";
-process.env.PORT = "8082"
+// process.env.PORT = "8082"
 
 const app = require('../../server');
 const db = require('../../models');
