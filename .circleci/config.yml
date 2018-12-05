@@ -38,8 +38,12 @@ version: 2
 jobs:
   build:
     docker:
+      nodeServer:
       # specify the version you desire here
       - image: circleci/node:8.9.0
+      depends_on:
+      - mysql
+    mysql:
       - image: circleci/mysql:5.7
     container_name: mysql
     restart: on-failure:2
@@ -125,8 +129,8 @@ jobs:
 #     container_name: node-server
 #     working_dir: /node/server
 #     restart: on-failure:2
-#     depends_on:
-#       - mysql
+    # depends_on:
+    #   - mysql
 #     image: circleci/node:8.9.0
 #     command: /node/createUser.sh
 #     volumes:
