@@ -11,7 +11,7 @@
     "password": "root",
     "database": "test",
     "dialect": "mysql",
-    "host": "mysql"
+    "host": "us-cdbr-iron-east-05.cleardb.net"
   },
   "production": {
     "username": "root",
