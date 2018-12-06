@@ -146,10 +146,11 @@ jobs:
           MYSQL_PASSWORD: root
     steps:
       - checkout
-      
+
       -run: 
           name: apt update
-          command: apt-get update --fix-missing
+          command: apt-get update
+          
       - run:
           name: install mysql client
           command: sudo apt-get install mysql-client
