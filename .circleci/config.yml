@@ -146,16 +146,13 @@ jobs:
           MYSQL_PASSWORD: root
     steps:
       - checkout
+
       - run:
           name: install mysql client
           command: sudo apt-get install mysql-client
-      -run: 
-          name: apt update
-          command: apt-get update --fix-missing
       - run:
           name: install dockerize
           command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-
           environment:
             DOCKERIZE_VERSION: v0.3.0
       - run:
