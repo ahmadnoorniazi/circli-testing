@@ -160,7 +160,10 @@ jobs:
             DOCKERIZE_VERSION: v0.3.0
       - run:
           name: Wait for db
-          command: dockerize -wait tcp:localhost:3306 -timeout 1m
+          command: dockerize -wait tcp://$HOST:$PORT -timeout 1m
+          environment:
+            HOST: localhost
+            PORT: 3306
       - run:
           name: create database
           command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
