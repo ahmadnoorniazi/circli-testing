@@ -146,8 +146,8 @@ jobs:
           MYSQL_PASSWORD: root
     steps:
       - checkout
-      
-      -run: 
+
+      - run: 
           name: apt update
           command: apt-get update   
       - run:
