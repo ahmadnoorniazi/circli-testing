@@ -155,9 +155,9 @@ jobs:
       - run:
           name: Wait for db
           command: dockerize -wait tcp://$HOST:$PORT -timeout 1m
-      environment:
-        HOST: localhost
-        PORT: 3306
+          environment:
+            HOST: localhost
+            PORT: 3306
 
       - run:
           name: create database
