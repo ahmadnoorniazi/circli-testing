@@ -28,24 +28,24 @@
 #     steps:
 #       - checkout
 #       # Download and cache dependencies
-#       - restore_cache:
-#           keys:
-#           - v1-dependencies-{{ checksum "package.json" }}
-#           # fallback to using the latest cache if no exact match is found
-#           - v1-dependencies-
+      # - restore_cache:
+      #     keys:
+      #     - v1-dependencies-{{ checksum "package.json" }}
+      #     # fallback to using the latest cache if no exact match is found
+      #     - v1-dependencies-
 
-#       - run: yarn install
+      # - run: yarn install
       
 
-#       - save_cache:
-#           paths:
-#             - node_modules
-#             - ../server:/node/server
-#              - mounts/scripts/createUser.sh:/node/createUser.sh:ro
-#           key: v1-dependencies-{{ checksum "package.json" }}
+      # - save_cache:
+      #     paths:
+      #       - node_modules
+      #       - ../server:/node/server
+      #        - mounts/scripts/createUser.sh:/node/createUser.sh:ro
+      #     key: v1-dependencies-{{ checksum "package.json" }}
         
-#       # run tests!
-#       - run: yarn test
+      # # run tests!
+      # - run: yarn test
       
 
 ###################
@@ -146,7 +146,23 @@ jobs:
           MYSQL_PASSWORD: root
     steps:
       - checkout
+       - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
+      - run: yarn install
+      
+
+      - save_cache:
+          paths:
+            - node_modules
+            - ../server:/node/server
+             - mounts/scripts/createUser.sh:/node/createUser.sh:ro
+          key: v1-dependencies-{{ checksum "package.json" }}
+        
+      # run tests!
       - run: 
           name: apt update
           command: sudo apt-get update   
@@ -159,9 +175,6 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.3.0
       - run:
-          name: start container
-          command: docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:5.5
-      - run:
           name: Wait for db
           command: dockerize -wait tcp://$HOST:$PORT -timeout 1m
           environment:
@@ -169,7 +182,7 @@ jobs:
             PORT: 3306
       - run:
           name: create database
-          command: mysql -e 'CREATE DATABASE TEST' -u root --host mysql
+          command: mysql -e 'CREATE DATABASE TEST' -u root --host 
 
         
 
