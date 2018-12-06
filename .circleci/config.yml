@@ -181,6 +181,9 @@ jobs:
       #     environment:
       #       HOST: localhost
       #       PORT: 3307
+      - run: 
+          name: start sql
+          command: sudo service mysql start
       - run:
           name: create database
           command: mysql -e 'CREATE DATABASE TEST' -uroot -proot
