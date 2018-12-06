@@ -181,12 +181,12 @@ jobs:
       #     environment:
       #       HOST: localhost
       #       PORT: 3307
-      - run: 
-          name: start sql
-          command: sudo service mysql restart
+      # - run: 
+      #     name: start sql
+      #     command: docker run --name db -e -d
       - run:
           name: create database
-          command: mysql -e 'CREATE DATABASE TEST' -uroot -proot
+          command: mysql -e 'CREATE DATABASE TEST' -uroot -p3307:3306
 
         
 
