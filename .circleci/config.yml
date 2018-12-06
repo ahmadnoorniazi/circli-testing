@@ -183,7 +183,7 @@ jobs:
       #       PORT: 3307
       - run:
           name: create database
-          command: mysql -e 'CREATE DATABASE TEST' -u root --host mysql
+          command: mysql -e 'CREATE DATABASE TEST' -u root --host localhost:3307
 
         
 
