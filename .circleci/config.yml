@@ -186,7 +186,7 @@ jobs:
       #     command: docker run --name db -e -d
       - run:
           name: create database
-          command: mysql -e 'CREATE DATABASE TEST' -uroot -p3307:3306
+          command: mysql -e 'CREATE DATABASE TEST' -uroot --host mysql:5.7
 
         
 
