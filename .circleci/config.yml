@@ -183,7 +183,7 @@ jobs:
       #       PORT: 3307
       - run: 
           name: start sql
-          command: sudo service mysql start
+          command: sudo service mysql restart
       - run:
           name: create database
           command: mysql -e 'CREATE DATABASE TEST' -uroot -proot
