@@ -162,7 +162,7 @@ jobs:
           name: Wait for db
           command: dockerize -wait tcp://$HOST:$PORT -timeout 1m
           environment:
-            HOST: localhost
+            HOST: mysql
             PORT: 3306
       - run:
           name: create database
