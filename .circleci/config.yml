@@ -149,7 +149,7 @@ jobs:
 
       - run: 
           name: apt update
-          command: apt-get update   
+          command: sudo apt-get update   
       - run:
           name: install mysql client
           command: sudo apt-get install mysql-client
