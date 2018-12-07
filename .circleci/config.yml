@@ -244,7 +244,7 @@ jobs:
       - run:
           name: create database
           command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
-      - run: docker-compose run node bash
+      - run: docker-compose build -d
       - run: yarn test
       # - run:
       #     name: test
