@@ -240,7 +240,7 @@ jobs:
             DOCKERIZE_VERSION: v0.6.0
       - run:
           name: wait for mysql
-          command: dockerize -wait tcp://mysql:3306 -timeout 1m
+          command: dockerize -wait tcp://3307:3306 -timeout 1m
       - run:
           name: create database
           command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
