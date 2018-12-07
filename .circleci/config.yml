@@ -244,7 +244,7 @@ jobs:
       - run:
           name: create database
           command: mysql -e 'CREATE DATABASE TEST' -u root --host 127.0.0.1
-      - run: docker run --name db -d -p 3306:3306 mysql:5
+      - run: docker run --name db -d -p 3307:3306 mysql:5
       - run: yarn test
       # - run:
       #     name: test
